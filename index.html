@@ -61,8 +61,8 @@
         
             
             function playSound (e){
-              console.log(e.srcElement.dataset.key)
-                const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`) || document.querySelector(`audio[data-key="${e.srcElement.dataset.key}"]`)
+              console.log(e)
+                const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`) || document.querySelector(`audio[data-key="${e}"]`)
                     if(!audio) return;
                     audio.currentTime =0;
                     audio.play();
@@ -70,15 +70,17 @@
             }
 
             function addTransition(e){
-                const key = document.querySelector(`.key[data-key="${e.keyCode}"]`) || document.querySelector(`.key[data-key="${e.srcElement.dataset.key}"]`)
-                console.log(key)
+                const key = document.querySelector(`.key[data-key="${e.keyCode}"]`) || document.querySelector(`.key[data-key="${e}"]`)
                 key.classList.add('playing')
             }
 
             const keys = document.querySelectorAll('.key')
                 keys.forEach(key => key.addEventListener('transitionend', removeTransition))
-                keys.forEach(key => key.addEventListener('click', playSound))
-                
+                keys.forEach(key => key.addEventListener('click', (e) => {
+                    const keyCode = key.dataset.key
+                    playSound(keyCode)
+                  }))
+                            
 
             function removeTransition(e){
                     this.classList.remove('playing')
